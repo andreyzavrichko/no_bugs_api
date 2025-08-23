@@ -17,6 +17,7 @@
         <allure.version>2.27.0</allure.version>
         <allure.testng.version>2.27.0</allure.testng.version>
         <jackson.version>2.17.2</jackson.version>
+        <wiremock.version>3.9.1</wiremock.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -62,6 +63,12 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
             <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.wiremock</groupId>
+            <artifactId>wiremock</artifactId>
+            <version>${wiremock.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
