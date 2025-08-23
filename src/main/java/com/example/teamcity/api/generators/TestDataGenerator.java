@@ -20,22 +20,22 @@ public final class TestDataGenerator {
 
     /**
      * Основной метод генерации тестовых данных.
-     *
+     * <p>
      * Если у поля аннотация Optional, оно пропускается, иначе:
-     *
+     * <p>
      * 1) если у поля аннотация Parameterizable, и в метод были переданы параметры, то поочередно (по мере встречи полей с
-     *     этой аннотацией) устанавливаются переданные параметры. То есть, если по ходу генерации было пройдено 4 поля с
-     *     аннотацией Parameterizable, но параметров в метод было передано 3, то значения будут установлены только у первых
-     *     трех встретившихся элементов в порядке их передачи в метод. Поэтому также важно следить за порядком полей
-     *     в @Data классе;
-     *
+     * этой аннотацией) устанавливаются переданные параметры. То есть, если по ходу генерации было пройдено 4 поля с
+     * аннотацией Parameterizable, но параметров в метод было передано 3, то значения будут установлены только у первых
+     * трех встретившихся элементов в порядке их передачи в метод. Поэтому также важно следить за порядком полей
+     * в @Data классе;
+     * <p>
      * 2) иначе, если у поля аннотация Random и это строка, оно заполняется рандомными данными;
-     *
+     * <p>
      * 3) иначе, если поле - наследник класса BaseModel, то оно генерируется, рекурсивно отправляясь в новый метод generate;
-     *
+     * <p>
      * 4) иначе, если поле - List, у которого generic type - наследник класса BaseModel, то оно устанавливается списком
-     *     из одного элемента, который генерируется, рекурсивно отправляясь в новый метод generate.
-     *
+     * из одного элемента, который генерируется, рекурсивно отправляясь в новый метод generate.
+     * <p>
      * Параметр generatedModels передается, когда генерируется несколько сущностей в цикле, и содержит в себе
      * сгенерированные на предыдущих шагах сущности. Позволяет при генерации сложной сущности, которая своим полем содержит
      * другую сущность, сгенерированную на предыдущем шаге, установить ее, а не генерировать новую. Данная логика
@@ -93,7 +93,7 @@ public final class TestDataGenerator {
         try {
             var instance = TestData.class.getDeclaredConstructor().newInstance();
             var generatedModels = new ArrayList<BaseModel>();
-            for (var field: TestData.class.getDeclaredFields()) {
+            for (var field : TestData.class.getDeclaredFields()) {
                 field.setAccessible(true);
                 if (BaseModel.class.isAssignableFrom(field.getType())) {
                     var generatedModel = generate(generatedModels, field.getType().asSubclass(BaseModel.class));
@@ -103,7 +103,8 @@ public final class TestDataGenerator {
                 field.setAccessible(false);
             }
             return instance;
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                 NoSuchMethodException e) {
             throw new IllegalStateException("Cannot generate test data", e);
         }
     }

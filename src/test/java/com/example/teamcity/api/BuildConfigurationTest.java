@@ -1,4 +1,4 @@
 package com.example.teamcity.api;
 
-public class BuildConfigurationTest extends BaseApiTest{
+public class BuildConfigurationTest extends BaseApiTest {
 }
