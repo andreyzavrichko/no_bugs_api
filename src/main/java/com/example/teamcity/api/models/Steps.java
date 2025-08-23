@@ -5,13 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
-    private String username;
-    private String password;
+public class Steps {
+    private Integer count;
+    private List<Step> step;
 }
-
-
