@@ -4,8 +4,8 @@ import com.example.teamcity.api.models.Project;
 import com.example.teamcity.api.requests.CheckedRequests;
 import com.example.teamcity.api.requests.unchecked.UncheckedBase;
 import com.example.teamcity.api.spec.Specifications;
+import com.example.teamcity.api.validators.ValidationResponseSpecifications;
 import org.apache.http.HttpStatus;
-import org.hamcrest.Matchers;
 import org.testng.annotations.Test;
 
 import static com.example.teamcity.api.enums.Endpoint.PROJECTS;
@@ -24,7 +24,7 @@ public class ProjectTest extends BaseApiTest {
 
         var createdProject = userCheckRequests.<Project>getRequest(PROJECTS).read(testData.getProject().getId());
 
-        softy.assertEquals(testData.getProject().getName(), createdProject.getName(), "Project name is not correct");
+        softy.assertEquals(createdProject, testData.getProject());
     }
 
     @Test(description = "User should not be able to create two projects with the same id", groups = {"Negative", "CRUD"})
@@ -40,10 +40,7 @@ public class ProjectTest extends BaseApiTest {
         new UncheckedBase(Specifications.authSpec(testData.getUser()), PROJECTS)
                 .create(projectWithSameId)
                 .then()
-                .statusCode(HttpStatus.SC_BAD_REQUEST)
-                .body("errors[0].message", Matchers.equalTo(
-                        "Project ID \"" + testData.getProject().getId() + "\" is already used by another project"
-                ));
+                .spec(ValidationResponseSpecifications.checkProjectWithIdAlreadyExist(testData.getProject().getId()));
     }
 
     @Test(description = "Unauthorized user should not be able to create project", groups = {"Negative", "CRUD"})
@@ -53,7 +50,6 @@ public class ProjectTest extends BaseApiTest {
                 .then()
                 .statusCode(HttpStatus.SC_UNAUTHORIZED);
     }
-
 
     @Test(description = "User should not be able to create project with empty name", groups = {"Negative", "CRUD"})
     public void userCreatesProjectWithEmptyNameTest() {
@@ -65,11 +61,10 @@ public class ProjectTest extends BaseApiTest {
         new UncheckedBase(Specifications.authSpec(testData.getUser()), PROJECTS)
                 .create(emptyNameProject)
                 .then()
-                .statusCode(HttpStatus.SC_BAD_REQUEST)
-                .body(Matchers.containsString("name cannot be empty"));
+                .spec(ValidationResponseSpecifications.checkProjectWithEmptyName());
     }
 
-    @Test(description = "User should not be able to create project with empty name", groups = {"Negative", "CRUD"})
+    @Test(description = "User should not be able to create project with space name", groups = {"Negative", "CRUD"})
     public void userCreatesProjectWithSpaceNameTest() {
         var emptyNameProject = generate(Project.class);
         emptyNameProject.setName(" ");
@@ -79,8 +74,7 @@ public class ProjectTest extends BaseApiTest {
         new UncheckedBase(Specifications.authSpec(testData.getUser()), PROJECTS)
                 .create(emptyNameProject)
                 .then()
-                .statusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR)
-                .body(Matchers.containsString("Given project name is empty."));
+                .spec(ValidationResponseSpecifications.checkProjectWithSpaceName());
     }
 
     @Test(description = "User should not be able to create two projects with the same name", groups = {"Negative", "CRUD"})
@@ -96,10 +90,7 @@ public class ProjectTest extends BaseApiTest {
         new UncheckedBase(Specifications.authSpec(testData.getUser()), PROJECTS)
                 .create(projectWithSameName)
                 .then()
-                .statusCode(HttpStatus.SC_BAD_REQUEST)
-                .body("errors[0].message", Matchers.equalTo(
-                        "Project with this name already exists: " + testData.getProject().getName()
-                ));
+                .spec(ValidationResponseSpecifications.checkProjectWithNameAlreadyExist(testData.getProject().getName()));
     }
 
     @Test(description = "User should be able to create project with long name", groups = {"Positive", "CRUD"})
@@ -127,10 +118,7 @@ public class ProjectTest extends BaseApiTest {
         new UncheckedBase(Specifications.authSpec(testData.getUser()), PROJECTS)
                 .create(invalidIdProject)
                 .then()
-                .statusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR)
-                .body("errors[0].message", Matchers.equalTo(
-                        "Project ID \"invalid#id\" is invalid: contains unsupported character '#'. ID should start with a latin letter and contain only latin letters, digits and underscores (at most 225 characters)."
-                ));
+                .spec(ValidationResponseSpecifications.checkProjectWithInvalidId("invalid#id"));
     }
 
 }
