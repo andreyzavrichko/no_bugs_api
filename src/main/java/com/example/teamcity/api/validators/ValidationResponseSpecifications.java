@@ -32,6 +32,13 @@ public class ValidationResponseSpecifications {
         return responseSpecBuilder.build();
     }
 
+    public static ResponseSpecification checkProjectWithEmptyProjectName(String id) {
+        ResponseSpecBuilder responseSpecBuilder = new ResponseSpecBuilder();
+        responseSpecBuilder.expectStatusCode(HttpStatus.SC_BAD_REQUEST);
+        responseSpecBuilder.expectBody(Matchers.containsString("Project name cannot be empty"));
+        return responseSpecBuilder.build();
+    }
+
     public static ResponseSpecification checkProjectWithSpaceName() {
         ResponseSpecBuilder responseSpecBuilder = new ResponseSpecBuilder();
         responseSpecBuilder.expectStatusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR);
@@ -44,6 +51,60 @@ public class ValidationResponseSpecifications {
         responseSpecBuilder.expectStatusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR);
         responseSpecBuilder.expectBody("errors[0].message", Matchers.equalTo(
                 "Project ID \"" + invalidId + "\" is invalid: contains unsupported character '#'. ID should start with a latin letter and contain only latin letters, digits and underscores (at most 225 characters)."
+        ));
+        return responseSpecBuilder.build();
+    }
+
+    public static ResponseSpecification checkProjectWithEmptyId() {
+        ResponseSpecBuilder responseSpecBuilder = new ResponseSpecBuilder();
+        responseSpecBuilder.expectStatusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+        responseSpecBuilder.expectBody("errors[0].message", Matchers.equalTo(
+                "Project ID must not be empty."
+        ));
+        return responseSpecBuilder.build();
+    }
+
+    public static ResponseSpecification checkProjectWithStartWithNonLetterId(String invalidId) {
+        ResponseSpecBuilder responseSpecBuilder = new ResponseSpecBuilder();
+        responseSpecBuilder.expectStatusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+        responseSpecBuilder.expectBody("errors[0].message", Matchers.equalTo(
+                "Project ID \"" + invalidId + "\" is invalid: starts with non-letter character '1'. ID should start with a latin letter and contain only latin letters, digits and underscores (at most 225 characters)."
+        ));
+        return responseSpecBuilder.build();
+    }
+
+    public static ResponseSpecification checkProjectWithInvalidSymbolId(String invalidId) {
+        ResponseSpecBuilder responseSpecBuilder = new ResponseSpecBuilder();
+        responseSpecBuilder.expectStatusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+        responseSpecBuilder.expectBody("errors[0].message", Matchers.equalTo(
+                "Project ID \"" + invalidId + "\" is invalid: contains unsupported character '@'. ID should start with a latin letter and contain only latin letters, digits and underscores (at most 225 characters)."
+        ));
+        return responseSpecBuilder.build();
+    }
+
+    public static ResponseSpecification checkProjectWithNonLatinId(String invalidId) {
+        ResponseSpecBuilder responseSpecBuilder = new ResponseSpecBuilder();
+        responseSpecBuilder.expectStatusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+        responseSpecBuilder.expectBody("errors[0].message", Matchers.equalTo(
+                "Project ID \"" + invalidId + "\" is invalid: contains non-latin letter '"+invalidId.charAt(0)+"'. ID should start with a latin letter and contain only latin letters, digits and underscores (at most 225 characters)."
+        ));
+        return responseSpecBuilder.build();
+    }
+
+    public static ResponseSpecification checkProjectWith256Id(String invalidId) {
+        ResponseSpecBuilder responseSpecBuilder = new ResponseSpecBuilder();
+        responseSpecBuilder.expectStatusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+        responseSpecBuilder.expectBody("errors[0].message", Matchers.equalTo(
+                "Project ID \"" + invalidId + "\" is invalid: it is 226 characters long while the maximum length is 225. ID should start with a latin letter and contain only latin letters, digits and underscores (at most 225 characters)."
+        ));
+        return responseSpecBuilder.build();
+    }
+
+    public static ResponseSpecification checkProjectNonLetterId(String invalidId) {
+        ResponseSpecBuilder responseSpecBuilder = new ResponseSpecBuilder();
+        responseSpecBuilder.expectStatusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+        responseSpecBuilder.expectBody("errors[0].message", Matchers.equalTo(
+                "Project ID \"" + invalidId + "\" is invalid: starts with non-letter character '"+invalidId.charAt(0)+"'. ID should start with a latin letter and contain only latin letters, digits and underscores (at most 225 characters)."
         ));
         return responseSpecBuilder.build();
     }
