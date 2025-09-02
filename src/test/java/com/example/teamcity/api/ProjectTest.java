@@ -33,56 +33,37 @@ public class ProjectTest extends BaseApiTest {
         softy.assertEquals(createdProject, testData.getProject());
     }
 
-    @Test(description = "User should be able to create a project if id includes repeating symbols", groups = {"Positive", "CRUD"})
-    public void userCreatesProjectWithRepeatingIdSymbolsTest() {
-        superUserCheckRequests.getRequest(USERS).create(testData.getUser());
-        var userCheckRequests = new CheckedRequests(Specifications.authSpec(testData.getUser()));
-
-        var project = generate(Project.class);
-        project.setId("aaa111aaa111" + getString());
-        userCheckRequests.<Project>getRequest(PROJECTS).create(project);
-
-        var createdProject = userCheckRequests.<Project>getRequest(PROJECTS).read(project.getId());
-        softy.assertEquals(createdProject, project);
+    @DataProvider(name = "positiveProjectCreationDataProvider")
+    public Object[][] positiveProjectCreationDataProvider() {
+        return new Object[][]{
+                {"User should be able to create a project if id includes repeating symbols", "aaa111aaa111" + getString(), getString(), false},
+                {"User should be able to create a project if id has 225 symbols", "a".repeat(225), getString(), false},
+                {"User should be able to create a project if id includes latin letters, digits", "abc123XYZ789" + getString(), getString(), false},
+                {"User should be able to create a project if id includes 1 valid symbol", getString(1), getString(), false},
+                {"User should be able to create project with long name", getString(), generate() + "x".repeat(256), true},
+                {"User should be able to create a project if name has cyrillic symbols", getString(), "ПроектТест", false}
+        };
     }
 
-    @Test(description = "User should be able to create a project if id has 225 symbols", groups = {"Positive", "CRUD"})
-    public void userCreatesProjectWith225IdSymbolsTest() {
+    @Test(description = "User should be able to create project with correct data", groups = {"Positive", "CRUD"},
+            dataProvider = "positiveProjectCreationDataProvider")
+    public void userCreatesProjectWithCorrectDataTest(String description, String projectId, String projectName, boolean checkNameOnly) {
         superUserCheckRequests.getRequest(USERS).create(testData.getUser());
         var userCheckRequests = new CheckedRequests(Specifications.authSpec(testData.getUser()));
 
         var project = generate(Project.class);
-        project.setId("a".repeat(225));
+        project.setId(projectId);
+        project.setName(projectName);
+
         userCheckRequests.<Project>getRequest(PROJECTS).create(project);
 
         var createdProject = userCheckRequests.<Project>getRequest(PROJECTS).read(project.getId());
-        softy.assertEquals(createdProject, project);
-    }
 
-    @Test(description = "User should be able to create a project if id includes latin letters, digits", groups = {"Positive", "CRUD"})
-    public void userCreatesProjectWithLatinAndDigitsIdTest() {
-        superUserCheckRequests.getRequest(USERS).create(testData.getUser());
-        var userCheckRequests = new CheckedRequests(Specifications.authSpec(testData.getUser()));
-
-        var project = generate(Project.class);
-        project.setId("abc123XYZ789" + getString());
-        userCheckRequests.<Project>getRequest(PROJECTS).create(project);
-
-        var createdProject = userCheckRequests.<Project>getRequest(PROJECTS).read(project.getId());
-        softy.assertEquals(createdProject, project);
-    }
-
-    @Test(description = "User should be able to create a project if id includes 1 valid symbol", groups = {"Positive", "CRUD"})
-    public void userCreatesProjectWithOneSymbolIdTest() {
-        superUserCheckRequests.getRequest(USERS).create(testData.getUser());
-        var userCheckRequests = new CheckedRequests(Specifications.authSpec(testData.getUser()));
-
-        var project = generate(Project.class);
-        project.setId(getString(1));
-        userCheckRequests.<Project>getRequest(PROJECTS).create(project);
-
-        var createdProject = userCheckRequests.<Project>getRequest(PROJECTS).read(project.getId());
-        softy.assertEquals(createdProject, project);
+        if (checkNameOnly) {
+            softy.assertEquals(createdProject.getName(), project.getName(), "Project name is not correct for " + description);
+        } else {
+            softy.assertEquals(createdProject, project, "Project creation failed for " + description);
+        }
     }
 
 
@@ -102,34 +83,6 @@ public class ProjectTest extends BaseApiTest {
                 .spec(ValidationResponseSpecifications.checkProjectWithIdAlreadyExist(testData.getProject().getId()));
     }
 
-
-    @Test(description = "User should be able to create project with long name", groups = {"Positive", "CRUD"})
-    public void userCreatesProjectWithLongNameTest() {
-        var longNameProject = generate(Project.class);
-        longNameProject.setName(generate() + "x".repeat(256));
-
-        superUserCheckRequests.getRequest(USERS).create(testData.getUser());
-        var userCheckRequests = new CheckedRequests(Specifications.authSpec(testData.getUser()));
-
-        userCheckRequests.<Project>getRequest(PROJECTS).create(longNameProject);
-
-        var createdProject = userCheckRequests.<Project>getRequest(PROJECTS).read(longNameProject.getId());
-
-        softy.assertEquals(longNameProject.getName(), createdProject.getName(), "Project name is not correct for long name");
-    }
-
-    @Test(description = "User should be able to create a project if name has cyrillic symbols", groups = {"Positive", "CRUD"})
-    public void userCreatesProjectWithCyrillicNameTest() {
-        superUserCheckRequests.getRequest(USERS).create(testData.getUser());
-        var userCheckRequests = new CheckedRequests(Specifications.authSpec(testData.getUser()));
-
-        var project = generate(Project.class);
-        project.setName("ПроектТест");
-        userCheckRequests.<Project>getRequest(PROJECTS).create(project);
-
-        var createdProject = userCheckRequests.<Project>getRequest(PROJECTS).read(project.getId());
-        softy.assertEquals(createdProject, project);
-    }
 
     @Test(description = "User should not be able to create a copy of non existing project", groups = {"Negative", "CRUD"})
     public void userCreatesCopyOfNonExistingProjectTest() {
@@ -314,6 +267,12 @@ public class ProjectTest extends BaseApiTest {
                 .create(project)
                 .then()
                 .spec(spec);
+
+
+        new UncheckedBase(Specifications.authSpec(testData.getUser()), PROJECTS)
+                .read(project.getId())
+                .then()
+                .spec(ValidationResponseSpecifications.checkProjectNotFoundById(project.getId()));
     }
 
 

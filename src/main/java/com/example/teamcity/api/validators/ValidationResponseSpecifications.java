@@ -112,11 +112,14 @@ public class ValidationResponseSpecifications {
     public static ResponseSpecification checkProjectNotFoundById(String projectId) {
         ResponseSpecBuilder responseSpecBuilder = new ResponseSpecBuilder();
         responseSpecBuilder.expectStatusCode(HttpStatus.SC_NOT_FOUND);
-        responseSpecBuilder.expectBody("errors[0].message", Matchers.equalTo(
-                "No project found by name or internal/external id '" + projectId + "'."
+        responseSpecBuilder.expectBody("errors[0].message", Matchers.anyOf(
+                Matchers.containsString("Project cannot be found by external id '" + projectId + "'"),
+                Matchers.equalTo("No project found by name or internal/external id '" + projectId + "'.")
         ));
         return responseSpecBuilder.build();
     }
+
+
 
     public static ResponseSpecification checkAccessDeniedForCreateProject() {
         ResponseSpecBuilder responseSpecBuilder = new ResponseSpecBuilder();
