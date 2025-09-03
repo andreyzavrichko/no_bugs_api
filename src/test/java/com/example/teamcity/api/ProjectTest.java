@@ -47,7 +47,7 @@ public class ProjectTest extends BaseApiTest {
 
     @Test(description = "User should be able to create project with correct data", groups = {"Positive", "CRUD"},
             dataProvider = "positiveProjectCreationDataProvider")
-    public void userCreatesProjectWithCorrectDataTest(String description, String projectId, String projectName) {
+    public void userCreatesProjectWithCorrectDataTest(String description, String projectId, String projectName, boolean checkNameOnly) {
         superUserCheckRequests.getRequest(USERS).create(testData.getUser());
         var userCheckRequests = new CheckedRequests(Specifications.authSpec(testData.getUser()));
 
