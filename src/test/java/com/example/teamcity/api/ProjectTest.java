@@ -35,19 +35,19 @@ public class ProjectTest extends BaseApiTest {
 
     @DataProvider(name = "positiveProjectCreationDataProvider")
     public Object[][] positiveProjectCreationDataProvider() {
-        return new Object[][]{
-                {"User should be able to create a project if id includes repeating symbols", "aaa111aaa111" + getString(), getString(), false},
-                {"User should be able to create a project if id has 225 symbols", "a".repeat(225), getString(), false},
-                {"User should be able to create a project if id includes latin letters, digits", "abc123XYZ789" + getString(), getString(), false},
-                {"User should be able to create a project if id includes 1 valid symbol", getString(1), getString(), false},
-                {"User should be able to create project with long name", getString(), generate() + "x".repeat(256), true},
-                {"User should be able to create a project if name has cyrillic symbols", getString(), "ПроектТест", false}
+        return new Object[][] {
+                {"User should be able to create a project if id includes repeating symbols", "aaa111aaa111" + getString(), getString()},
+                {"User should be able to create a project if id has 225 symbols", "a".repeat(225), getString()},
+                {"User should be able to create a project if id includes latin letters, digits", "abc123XYZ789" + getString(), getString()},
+                {"User should be able to create a project if id includes 1 valid symbol", getString(1), getString()},
+                {"User should be able to create a project if name has cyrillic symbols", getString(), "ПроектТест"},
+                {"User should be able to create project with long name", getString(), generate() + "x".repeat(256)}
         };
     }
 
     @Test(description = "User should be able to create project with correct data", groups = {"Positive", "CRUD"},
             dataProvider = "positiveProjectCreationDataProvider")
-    public void userCreatesProjectWithCorrectDataTest(String description, String projectId, String projectName, boolean checkNameOnly) {
+    public void userCreatesProjectWithCorrectDataTest(String description, String projectId, String projectName) {
         superUserCheckRequests.getRequest(USERS).create(testData.getUser());
         var userCheckRequests = new CheckedRequests(Specifications.authSpec(testData.getUser()));
 
@@ -58,12 +58,22 @@ public class ProjectTest extends BaseApiTest {
         userCheckRequests.<Project>getRequest(PROJECTS).create(project);
 
         var createdProject = userCheckRequests.<Project>getRequest(PROJECTS).read(project.getId());
+        softy.assertEquals(createdProject, project, "Project creation failed for " + description);
+    }
 
-        if (checkNameOnly) {
-            softy.assertEquals(createdProject.getName(), project.getName(), "Project name is not correct for " + description);
-        } else {
-            softy.assertEquals(createdProject, project, "Project creation failed for " + description);
-        }
+    @Test(description = "User should be able to create project with long name and verify name", groups = {"Positive", "CRUD"})
+    public void userCreatesProjectWithLongNameTest() {
+        superUserCheckRequests.getRequest(USERS).create(testData.getUser());
+        var userCheckRequests = new CheckedRequests(Specifications.authSpec(testData.getUser()));
+
+        var project = generate(Project.class);
+        project.setId(getString());
+        project.setName(generate() + "x".repeat(256));
+
+        userCheckRequests.<Project>getRequest(PROJECTS).create(project);
+
+        var createdProject = userCheckRequests.<Project>getRequest(PROJECTS).read(project.getId());
+        softy.assertEquals(createdProject.getName(), project.getName(), "Project name is not correct for long name");
     }
 
 
