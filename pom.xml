@@ -19,6 +19,7 @@
         <jackson.version>2.17.2</jackson.version>
         <wiremock.version>3.9.1</wiremock.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <selenide.version>7.4.3</selenide.version>
     </properties>
 
     <dependencies>
@@ -27,7 +28,11 @@
             <artifactId>rest-assured</artifactId>
             <version>${rest-assured.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.codeborne</groupId>
+            <artifactId>selenide</artifactId>
+            <version>${selenide.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>

@@ -86,7 +86,7 @@ public class ValidationResponseSpecifications {
         ResponseSpecBuilder responseSpecBuilder = new ResponseSpecBuilder();
         responseSpecBuilder.expectStatusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR);
         responseSpecBuilder.expectBody("errors[0].message", Matchers.equalTo(
-                "Project ID \"" + invalidId + "\" is invalid: contains non-latin letter '"+invalidId.charAt(0)+"'. ID should start with a latin letter and contain only latin letters, digits and underscores (at most 225 characters)."
+                "Project ID \"" + invalidId + "\" is invalid: contains non-latin letter '" + invalidId.charAt(0) + "'. ID should start with a latin letter and contain only latin letters, digits and underscores (at most 225 characters)."
         ));
         return responseSpecBuilder.build();
     }
@@ -104,7 +104,7 @@ public class ValidationResponseSpecifications {
         ResponseSpecBuilder responseSpecBuilder = new ResponseSpecBuilder();
         responseSpecBuilder.expectStatusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR);
         responseSpecBuilder.expectBody("errors[0].message", Matchers.equalTo(
-                "Project ID \"" + invalidId + "\" is invalid: starts with non-letter character '"+invalidId.charAt(0)+"'. ID should start with a latin letter and contain only latin letters, digits and underscores (at most 225 characters)."
+                "Project ID \"" + invalidId + "\" is invalid: starts with non-letter character '" + invalidId.charAt(0) + "'. ID should start with a latin letter and contain only latin letters, digits and underscores (at most 225 characters)."
         ));
         return responseSpecBuilder.build();
     }
@@ -120,7 +120,6 @@ public class ValidationResponseSpecifications {
     }
 
 
-
     public static ResponseSpecification checkAccessDeniedForCreateProject() {
         ResponseSpecBuilder responseSpecBuilder = new ResponseSpecBuilder();
         responseSpecBuilder.expectStatusCode(HttpStatus.SC_FORBIDDEN);
@@ -129,8 +128,6 @@ public class ValidationResponseSpecifications {
         ));
         return responseSpecBuilder.build();
     }
-
-
 
 
 }
