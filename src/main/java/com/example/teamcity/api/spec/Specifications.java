@@ -26,6 +26,7 @@ public class Specifications {
 
     public static RequestSpecification unauthSpec() {
         var requestBuilder = reqBuilder();
+        requestBuilder.setBaseUri("http://%s".formatted(Config.getProperty("host")));
         return requestBuilder.build();
     }
 
