@@ -14,7 +14,7 @@ import static com.codeborne.selenide.Selenide.$$;
 public class ProjectsPage extends BasePage {
     private static final String PROJECTS_URL = "/favorite/projects";
 
-    private ElementsCollection projectElements = $$("div[class*='Subproject-module__container--uq']");
+    private ElementsCollection projectElements = $$("div[class*='Subproject__container']");
 
     private SelenideElement spanFavoriteProjects = $("span[class='ProjectPageHeader__title--ih']");
 
@@ -23,12 +23,13 @@ public class ProjectsPage extends BasePage {
     // ElementCollection -> List<ProjectElement>
     // UI elements -> List<Object>
     // ElementCollection -> List<BasePageElement>
-    public ProjectsPage() {
-        header.shouldBe(Condition.visible, BASE_WAITING);
-    }
 
     public static ProjectsPage open() {
         return Selenide.open(PROJECTS_URL, ProjectsPage.class);
+    }
+
+    public ProjectsPage() {
+        header.shouldBe(Condition.visible, BASE_WAITING);
     }
 
 

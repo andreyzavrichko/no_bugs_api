@@ -14,7 +14,7 @@ public class CreateProjectTest extends BaseUiTest {
     private static final String REPO_URL = "https://github.com/AlexPshe/spring-core-for-qa";
 
     @Test(description = "User should be able to create project", groups = {"Positive"})
-    public void userCreatesProject() {
+    public void userCreatesProject() throws InterruptedException {
         // подготовка окружения
         loginAs(testData.getUser());
 
@@ -36,6 +36,7 @@ public class CreateProjectTest extends BaseUiTest {
         var foundProjects = ProjectsPage.open()
                 .getProjects().stream()
                 .anyMatch(project -> project.getName().text().equals(testData.getProject().getName()));
+
         softy.assertTrue(foundProjects);
     }
 }
