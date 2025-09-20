@@ -6,6 +6,7 @@ public interface CrudInterface {
     Object create(BaseModel model);
 
     Object read(String id);
+    Object readByName(String name);
 
     Object update(String id, BaseModel model);
 
