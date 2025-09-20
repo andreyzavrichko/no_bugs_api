@@ -30,7 +30,7 @@ public class BaseUiTest extends BaseTest {
         Selenide.closeWebDriver();
     }
 
-    protected void loginAs(User user) {
+    public void loginAs(User user) {
         superUserCheckRequests.getRequest(Endpoint.USERS).create(testData.getUser());
         LoginPage.open().login(testData.getUser());
     }
