@@ -20,6 +20,9 @@ jobs:
           java-version: '17'
           distribution: 'zulu'
 
+      - name: Grant execute permission for mvnw
+        run: chmod +x ./mvnw
+
       - name: Validate Checkstyle
         run: ./mvnw validate
 
