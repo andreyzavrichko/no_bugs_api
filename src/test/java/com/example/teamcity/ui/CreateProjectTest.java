@@ -8,6 +8,8 @@ import com.example.teamcity.ui.pages.ProjectsPage;
 import com.example.teamcity.ui.pages.admin.CreateProjectPage;
 import org.testng.annotations.Test;
 
+import java.time.Duration;
+
 
 @Test(groups = {"Regression"})
 public class CreateProjectTest extends BaseUiTest {
@@ -31,7 +33,7 @@ public class CreateProjectTest extends BaseUiTest {
         // проверка состояния UI
         // (корректность считывания данных и отображение данных на UI)
         ProjectPage.open(createdProject.getId())
-                .title.shouldHave(Condition.exactText(testData.getProject().getName()));
+                .title.shouldBe(Condition.visible, Duration.ofSeconds(10)).shouldHave(Condition.exactText(testData.getProject().getName()));
 
         var foundProjects = ProjectsPage.open()
                 .getProjects().stream()
