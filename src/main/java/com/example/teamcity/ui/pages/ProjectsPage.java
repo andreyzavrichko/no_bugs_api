@@ -19,8 +19,6 @@ public class ProjectsPage extends BasePage {
 
     private SelenideElement spanFavoriteProjects = $("span[class='ProjectPageHeader__title--ih']");
 
-    private SelenideElement header = $(".MainPanel__router--gF > div");
-
     // ElementCollection -> List<ProjectElement>
     // UI elements -> List<Object>
     // ElementCollection -> List<BasePageElement>
@@ -31,6 +29,7 @@ public class ProjectsPage extends BasePage {
     }
 
     public ProjectsPage() {
+        SelenideElement header = $(".MainPanel__router--gF > div");
         header.shouldBe(Condition.visible, BASE_WAITING);
     }
 
