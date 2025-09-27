@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.function.Function;
 
 public abstract class BasePage {
-    protected static final Duration BASE_WAITING = Duration.ofSeconds(70);
+    protected static final Duration BASE_WAITING = Duration.ofSeconds(75);
     protected static final Duration LONG_WAITING = Duration.ofMinutes(5);
 
     protected <T extends BasePageElement> List<T> generatePageElements(
