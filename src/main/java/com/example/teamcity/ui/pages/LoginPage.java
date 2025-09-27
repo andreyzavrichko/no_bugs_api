@@ -12,7 +12,7 @@ public class LoginPage extends BasePage {
 
     private final SelenideElement inputUsername = $("#username");
     private final SelenideElement inputPassword = $("#password");
-    private SelenideElement inputSubmitLogin = $(".loginButton");
+    private final SelenideElement inputSubmitLogin = $(".loginButton");
 
     public SelenideElement inputSubmitLogin2 = $(".loginButton");
 
