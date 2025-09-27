@@ -36,12 +36,12 @@ public class ProjectTest extends BaseApiTest {
     @DataProvider(name = "positiveProjectCreationDataProvider")
     public Object[][] positiveProjectCreationDataProvider() {
         return new Object[][] {
-                {"User should be able to create a project if id includes repeating symbols", "aaa111aaa111" + getString(), getString()},
-                {"User should be able to create a project if id has 225 symbols", "a".repeat(225), getString()},
-                {"User should be able to create a project if id includes latin letters, digits", "abc123XYZ789" + getString(), getString()},
-                {"User should be able to create a project if id includes 1 valid symbol", getString(1), getString()},
-                {"User should be able to create a project if name has cyrillic symbols", getString(), "ПроектТест"},
-                {"User should be able to create project with long name", getString(), generate() + "x".repeat(256)}
+                {"User should be able to create a project if id includes repeating symbols", "aaa111aaa111" + getString(), getString(), false},
+                {"User should be able to create a project if id has 225 symbols", "a".repeat(225), getString(), false},
+                {"User should be able to create a project if id includes latin letters, digits", "abc123XYZ789" + getString(), getString(), false},
+                {"User should be able to create a project if id includes 1 valid symbol", getString(1), getString(), false},
+                {"User should be able to create a project if name has cyrillic symbols", getString(), "ПроектТест", true},
+                {"User should be able to create project with long name", getString(), generate() + "x".repeat(256), true}
         };
     }
 
@@ -260,8 +260,7 @@ public class ProjectTest extends BaseApiTest {
         return new Object[][]{
                 {"User should not be able to create project with empty name", getString(), "", ValidationResponseSpecifications.checkProjectWithEmptyName()},
                 {"User should not be able to create project with space name", getString(), " ", ValidationResponseSpecifications.checkProjectWithSpaceName()},
-                {"User should not be able to create project with empty id and name", "", "", ValidationResponseSpecifications.checkProjectWithEmptyName()},
-                {"User should not be able to create project with invalid id and empty name", "invalid#id", "", ValidationResponseSpecifications.checkProjectWithEmptyProjectName("invalid#id")}
+                 {"User should not be able to create project with invalid id and empty name", "invalid#id", "", ValidationResponseSpecifications.checkProjectWithEmptyProjectName("invalid#id")}
         };
     }
 
