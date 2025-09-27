@@ -9,7 +9,7 @@ runs:
         java-version: '17'
         distribution: 'zulu'
 
-    # По умолчанию в ubuntu отсуствуе команда ifconfig
+    # По умолчанию в ubuntu отсутствует команда ifconfig
     - name: Install ifconfig
       shell: bash
       run: sudo apt-get update && sudo apt-get install -y net-tools
@@ -60,6 +60,10 @@ runs:
         -v $(pwd)/tmp/teamcity_server/logs:/opt/teamcity/logs  \
         -p 8111:8111 \
         jetbrains/teamcity-server:2023.11.1
+
+    - name: Grant execute permission for mvnw
+      shell: bash
+      run: chmod +x ./mvnw
 
     - name: Setup TeamCity server
       shell: bash
