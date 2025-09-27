@@ -5,6 +5,7 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import com.example.teamcity.ui.elements.BuildElement;
+import io.qameta.allure.Step;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class ProjectBuildsPage extends BasePage {
         content.shouldBe(Condition.visible, BASE_WAITING);
     }
 
+    @Step("Open build page")
     public static ProjectBuildsPage open(String projectId) {
         return Selenide.open(PROJECT_BUILDS_URL.formatted(projectId), ProjectBuildsPage.class);
     }
