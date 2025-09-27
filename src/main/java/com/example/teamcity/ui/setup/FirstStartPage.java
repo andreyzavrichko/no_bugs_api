@@ -9,13 +9,13 @@ import io.qameta.allure.Step;
 import static com.codeborne.selenide.Selenide.$;
 
 public class FirstStartPage extends BasePage {
-    private final SelenideElement restoreButton = $("#restoreButton");
     private final SelenideElement proceedButton = $("#proceedButton");
     private final SelenideElement dbTypeSelect = $("#dbType");
     private final SelenideElement acceptLicenseCheckbox = $("#accept");
     private final SelenideElement submitButton = $("input[type='submit']");
 
     public FirstStartPage() {
+        SelenideElement restoreButton = $("#restoreButton");
         restoreButton.shouldBe(Condition.visible, LONG_WAITING);
     }
 
