@@ -9,7 +9,7 @@ import static com.codeborne.selenide.Selenide.$;
 public class CreateProjectPage extends CreateBasePage {
     private static final String PROJECT_SHOW_MODE = "createProjectMenu";
 
-    private SelenideElement projectNameInput = $("#projectName");
+    private final SelenideElement projectNameInput = $("#projectName");
 
     @Step("Open create project page")
     public static CreateProjectPage open(String projectId) {
