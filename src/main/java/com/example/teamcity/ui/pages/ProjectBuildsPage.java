@@ -26,6 +26,7 @@ public class ProjectBuildsPage extends BasePage {
         return Selenide.open(PROJECT_BUILDS_URL.formatted(projectId), ProjectBuildsPage.class);
     }
 
+    @Step("Get builds")
     public List<BuildElement> getBuilds() {
         return generatePageElements(buildsElements, BuildElement::new);
     }

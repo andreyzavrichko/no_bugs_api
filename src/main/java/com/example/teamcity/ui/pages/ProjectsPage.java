@@ -34,7 +34,7 @@ public class ProjectsPage extends BasePage {
         header.shouldBe(Condition.visible, BASE_WAITING);
     }
 
-
+    @Step("Get projects")
     public List<ProjectElement> getProjects() {
         return generatePageElements(projectElements, ProjectElement::new);
     }
