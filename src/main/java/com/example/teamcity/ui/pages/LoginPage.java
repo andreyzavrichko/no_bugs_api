@@ -11,7 +11,7 @@ public class LoginPage extends BasePage {
     private static final String LOGIN_URL = "/login.html";
 
     private final SelenideElement inputUsername = $("#username");
-    private SelenideElement inputPassword = $("#password");
+    private final SelenideElement inputPassword = $("#password");
     private SelenideElement inputSubmitLogin = $(".loginButton");
 
     public SelenideElement inputSubmitLogin2 = $(".loginButton");
