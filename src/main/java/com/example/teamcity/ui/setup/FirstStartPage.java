@@ -25,12 +25,11 @@ public class FirstStartPage extends BasePage {
     }
 
     @Step("Setup Team City")
-    public FirstStartPage setupFirstStart() {
+    public void setupFirstStart() {
         proceedButton.click();
         dbTypeSelect.shouldBe(Condition.visible, LONG_WAITING);
         proceedButton.click();
         acceptLicenseCheckbox.should(Condition.exist, LONG_WAITING).scrollTo().click();
         submitButton.click();
-        return this;
     }
 }

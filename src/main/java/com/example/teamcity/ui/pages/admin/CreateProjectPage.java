@@ -21,6 +21,7 @@ public class CreateProjectPage extends CreateBasePage {
         return this;
     }
 
+    @Step("Setup project")
     public void setupProject(String projectName, String buildTypeName) {
         projectNameInput.val(projectName);
         buildTypeNameInput.val(buildTypeName);
