@@ -11,7 +11,7 @@ import static com.codeborne.selenide.Selenide.$;
 
 public class ProjectPage extends BasePage {
     private static final String PROJECT_URL = "/project/%s";
-    private static final Duration TIMEOUT = Duration.ofSeconds(30);
+    private static final Duration TIMEOUT = Duration.ofSeconds(50);
 
     private final SelenideElement title = $("span[class*='ProjectPageHeader']");
 
