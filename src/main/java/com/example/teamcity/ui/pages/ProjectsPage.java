@@ -15,11 +15,9 @@ import static com.codeborne.selenide.Selenide.$$;
 public class ProjectsPage extends BasePage {
     private static final String PROJECTS_URL = "/favorite/projects";
 
-    private ElementsCollection projectElements = $$("div[class*='Subproject__container']");
+    private final ElementsCollection projectElements = $$("div[class*='Subproject__container']");
 
     private SelenideElement spanFavoriteProjects = $("span[class='ProjectPageHeader__title--ih']");
-
-    private SelenideElement header = $(".MainPanel__router--gF > div");
 
     // ElementCollection -> List<ProjectElement>
     // UI elements -> List<Object>
@@ -31,10 +29,11 @@ public class ProjectsPage extends BasePage {
     }
 
     public ProjectsPage() {
+        SelenideElement header = $(".MainPanel__router--gF > div");
         header.shouldBe(Condition.visible, BASE_WAITING);
     }
 
-
+    @Step("Get projects")
     public List<ProjectElement> getProjects() {
         return generatePageElements(projectElements, ProjectElement::new);
     }

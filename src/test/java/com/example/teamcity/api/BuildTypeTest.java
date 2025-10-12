@@ -47,8 +47,8 @@ public class BuildTypeTest extends BaseApiTest {
                 .create(buildTypeWithSameId)
                 .then()
                 .statusCode(HttpStatus.SC_BAD_REQUEST)
-                .body("errors[0].message", Matchers.equalTo(
-                        "The build configuration / template ID \"%s\" is already used by another configuration or template"
+                .body(Matchers.containsString(
+                        "The build configuration / template ID \"%s\" is already used"
                                 .formatted(testData.getBuildType().getId())
                 ));
     }

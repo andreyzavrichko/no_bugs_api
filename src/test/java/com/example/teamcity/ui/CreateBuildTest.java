@@ -24,7 +24,6 @@ public class CreateBuildTest extends BaseUiTest {
     @UserSession
     public void shouldCreateBuildConfiguration() {
 
-
         var request = new CheckedRequests(Specifications.authSpec(testData.getUser()));
         Project project = request.<Project>getRequest(Endpoint.PROJECTS).create(testData.getProject());
 
